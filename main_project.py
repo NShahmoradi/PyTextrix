@@ -8,37 +8,43 @@ questions = {
     6:'Please enter a number for the minimum character range of words:',
     7:'Please enter path of your file which you want to save there:'
 }
-
-def error_management_and_processes(counter_sentences=0, counter_words=0, ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "–", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\"],
-                                   ignored_words_txt='', ignored_dic_result={}, max_answer=0, min_answer=0,consecutive_words_counter=1,
-                                   counter_consecutive_words_counter=0, all_words_list=[], sum_len_of_words =0, ava_len_of_words=0,
-                                   range_of_length_of_word=[],new_counter_words=0):
+class AllErrors:
     class TheEndAtTheBeginningError(Exception):
         def __init__(self, message='If you don\'t want your case to be processed, what are you doing here?!🙃'):
             super().__init__(message)
-    class ResponseRangeError(Exception):
+
+    class ResponseRangeError(Exception):                
         def __init__(self, message='🛑 You have two ways to respond, y or n!'):
             super().__init__(message) 
+
     class ExitConditionError(Exception):
         def __init__(self, message='The process of processing your file is finished👋🙂'):
             super().__init__(message)  
+
     class NotFoundFileError(Exception):
         def __init__(self, message='🛑 Your file name or path may be incorrect or your file may be empty! please check your file.'):
             super().__init__(message)
+
     class ResponseError(Exception):
         def __init__(self, message='🛑 Your answer must be an integer or n!'):
-            super().__init__(message)                      
+            super().__init__(message)    
+            
+def error_management_and_processes(counter_sentences=0, counter_words=0, ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
+                                   ignored_words_txt='', ignored_dic_result={}, max_answer=0, min_answer=0,consecutive_words_counter=1,
+                                   counter_consecutive_words_counter=0, all_words_list=[], sum_len_of_words =0, ava_len_of_words=0,
+                                   range_of_length_of_word=[],new_counter_words=0):
+                
     k = 0
     try:  
         while k < len(questions):
             answer = input(questions[k])
             
             if answer in 'qQ':
-                raise ExitConditionError()
+                raise AllErrors.ExitConditionError()
             if k == 0 and answer in 'nN':
-                raise TheEndAtTheBeginningError()
+                raise AllErrors.TheEndAtTheBeginningError()
             if (k == 0 and answer not in 'YynN') or (k == 3 and answer not in 'YynN'):
-                raise ResponseRangeError()
+                raise AllErrors.ResponseRangeError()
                 
             if k in [1, 4, 7]:
                 try:
@@ -65,14 +71,13 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                             answer = input(questions[4])
                             with open(answer, mode='r') as file:
                                 ignored_words_txt = file.read()
-                                # if len(str(ignored_words_txt).split(' ')) == 1 or (len(str(ignored_words_txt).split(' ')) > 1):
-                                ignored_words_result_txt = ignored_words_txt.split(' ')
+                                ignored_words_result_txt = ignored_words_txt.split()
                                 for i in all_words_list:
                                     if i in ignored_words_result_txt:
                                         all_words_list.remove(i)
                                 counter_words = len(all_words_list)                               
                         except FileNotFoundError:
-                            raise NotFoundFileError()
+                            raise AllErrors.NotFoundFileError()
                     elif k==7:
                         try:
                             with open(answer, mode='w') as file:
@@ -81,10 +86,10 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                                     'ignored_words_result_txt -> as list'
                                 )   
                         except FileNotFoundError:
-                            raise NotFoundFileError()   
+                            raise AllErrors.NotFoundFileError()   
                               
                 except FileNotFoundError:
-                    raise NotFoundFileError()      
+                    raise AllErrors.NotFoundFileError()      
                     
             if k == 3 and answer in 'nN':
                 k = 5 
@@ -129,10 +134,10 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                                     all_words_list.remove(i)
                                                   
                 except ValueError:
-                    raise ResponseError()
+                    raise AllErrors.ResponseError()
                              
             k += 1  
 
-    except (ValueError, TheEndAtTheBeginningError, ResponseRangeError, ExitConditionError, NotFoundFileError,ResponseError) as e:
+    except (ValueError, AllErrors.TheEndAtTheBeginningError, AllErrors.ResponseRangeError, AllErrors.ExitConditionError, AllErrors.NotFoundFileError,AllErrors.ResponseError) as e:
         print(e)
 error_management_and_processes()
