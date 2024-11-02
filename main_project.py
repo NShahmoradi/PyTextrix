@@ -29,6 +29,8 @@ class AllErrors:
         def __init__(self, message='🛑 Your answer must be an integer or n!'):
             super().__init__(message)    
             
+            
+            
 def error_management_and_processes(counter_sentences=0, counter_words=0, ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    ignored_words_txt='', ignored_dic_result={}, max_answer=0, min_answer=0,consecutive_words_counter=1,
                                    counter_consecutive_words_counter=0, all_words_list=[], sum_len_of_words =0, ava_len_of_words=0,
