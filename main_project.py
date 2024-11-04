@@ -1,5 +1,9 @@
 questions = {
+<<<<<<< Updated upstream
     0:'Hi! welcome to command line interface (📌 if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?(y/n)',
+=======
+    0:'Hi! welcome to command line interface(📍if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?[Y/n]',
+>>>>>>> Stashed changes
     1:'Please enter path of your file:',
     2:'Please enter a number for consecutive words counter(if you don\'t have any idea for consecutive words counter please enter\'n\'):',
     3:'Do you have any ignored words file?(y/n)',
@@ -30,12 +34,20 @@ class AllErrors:
             super().__init__(message)    
             
             
+<<<<<<< Updated upstream
             
 def error_management_and_processes(counter_sentences=0, counter_words=0, ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    ignored_words_txt='', ignored_dic_result={}, max_answer=0, min_answer=0,consecutive_words_counter=1,
                                    counter_consecutive_words_counter=0, all_words_list=[], sum_len_of_words =0, ava_len_of_words=0,
                                    range_of_length_of_word=[],new_counter_words=0):
                 
+=======
+def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
+                                   counter_sentences=0, counter_line=0 ,counter_words=0,ignored_words_txt='', ignored_dic_result={},
+                                   max_answer=0, min_answer=0,consecutive_words_counter=1,counter_consecutive_words_counter=0,
+                                   all_words_list=[],sum_len_of_words =0, ava_len_of_words=0,range_of_length_of_word=[],
+                                   new_counter_words=0,word_jump=0,different_pattern_of_words_jump={}):               
+>>>>>>> Stashed changes
     k = 0
     try:  
         while k < len(questions):
@@ -65,7 +77,7 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
         
                         for i in all_words_list:
                             sum_len_of_words += len(i)
-                        ava_len_of_words = sum_len_of_words / counter_words  
+                        ave_len_of_words = sum_len_of_words / counter_words  
 
                     elif k == 3 and answer in 'yY':
                         k=4
@@ -74,18 +86,37 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                             with open(answer, mode='r') as file:
                                 ignored_words_txt = file.read()
                                 ignored_words_result_txt = ignored_words_txt.split()
+                                
                                 for i in all_words_list:
                                     if i in ignored_words_result_txt:
+<<<<<<< Updated upstream
                                         all_words_list.remove(i)
                                 counter_words = len(all_words_list)                               
+=======
+                                        result_txt = re.sub(re.escape(i),' ', result_txt)
+        
+                                counter_words = len(all_words_list)
+                                                               
+>>>>>>> Stashed changes
                         except FileNotFoundError:
                             raise AllErrors.NotFoundFileError()
                     elif k==7:
                         try:
+                            print('✔ Your file has been processed')
                             with open(answer, mode='w') as file:
                                 final_result = file.write(
                                     
-                                    'ignored_words_result_txt -> as list'
+                                    {
+                                        '🟢 Counter sentences:' : counter_sentences,'\n'
+                                        '🟢 All of the words in your file:' : all_words_list,'\n'
+                                        '🟢 Counter words:' : counter_words,'\n'
+                                        '🟢 Counter lines:' : counter_line,'\n'
+                                        '🟢 Ignored words list:' : ignored_words_result_txt,'\n'
+                                        '🟢 The average length of words in your text:' : ave_len_of_words
+                                        
+                                    }
+                                    
+                                    
                                 )   
                         except FileNotFoundError:
                             raise AllErrors.NotFoundFileError()   
@@ -101,11 +132,29 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                 if k==2 and (answer in 'nN'):  
                     k = 3
                     continue
+                
                 try:
+
                     answer = int(answer)
                     if k==2:
+<<<<<<< Updated upstream
                         pass
         
+=======
+                        word_jump = answer
+                        different_pattern_of_words_jump = [] 
+                        
+                        result_of_sort_consecutive_words_counter = {}
+                                            
+                        for i in range(len(all_words_list)-(word_jump-1)):
+                                different_pattern_of_words_jump.append(' '.join(all_words_list[i:i+word_jump])) 
+                                
+                        for i in different_pattern_of_words_jump:
+                            result_of_sort_consecutive_words_counter[different_pattern_of_words_jump.count(i)] =  i
+                            
+                        sorted_dict = dict(sorted(result_of_sort_consecutive_words_counter.items()))    
+
+>>>>>>> Stashed changes
                     if k == 5:
                         max_answer = answer
                     if k == 6:
@@ -127,10 +176,12 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                         
                     elif min_answer == max_answer:
                         all_words_list.clear()
+                        
                         for i in all_words_list:
                             if len(i) in min_answer:
                                 counter_words += 1
                                 all_words_list.append(i)
+                                
                         for i in all_words_list:
                                 if i in ignored_words_result_txt:
                                     all_words_list.remove(i)
@@ -139,7 +190,12 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                     raise AllErrors.ResponseError()
                              
             k += 1  
+<<<<<<< Updated upstream
 
     except (ValueError, AllErrors.TheEndAtTheBeginningError, AllErrors.ResponseRangeError, AllErrors.ExitConditionError, AllErrors.NotFoundFileError,AllErrors.ResponseError) as e:
+=======
+        print(final_result)
+    except (ValueError, TheEndAtTheBeginningError, ResponseRangeError,ExitConditionError,NotFoundFileError,ResponseError) as e:
+>>>>>>> Stashed changes
         print(e)
 error_management_and_processes()
