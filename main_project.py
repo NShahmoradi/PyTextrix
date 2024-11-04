@@ -1,6 +1,14 @@
 questions = {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     0:'Hi! welcome to command line interface (📌 if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?(y/n)',
+=======
+    0:'Hi! welcome to command line interface(📍if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?[Y/n]',
+>>>>>>> Stashed changes
+======
+    0:'Hi! welcome to command line interface(📍if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?[Y/n]',
+>>>>>>> Stashed changes
 =======
     0:'Hi! welcome to command line interface(📍if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?[Y/n]',
 >>>>>>> Stashed changes
@@ -35,6 +43,8 @@ class AllErrors:
             
             
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             
 def error_management_and_processes(counter_sentences=0, counter_words=0, ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    ignored_words_txt='', ignored_dic_result={}, max_answer=0, min_answer=0,consecutive_words_counter=1,
@@ -42,11 +52,21 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                                    range_of_length_of_word=[],new_counter_words=0):
                 
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    counter_sentences=0, counter_line=0 ,counter_words=0,ignored_words_txt='', ignored_dic_result={},
                                    max_answer=0, min_answer=0,consecutive_words_counter=1,counter_consecutive_words_counter=0,
                                    all_words_list=[],sum_len_of_words =0, ava_len_of_words=0,range_of_length_of_word=[],
                                    new_counter_words=0,word_jump=0,different_pattern_of_words_jump={}):               
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     k = 0
     try:  
@@ -97,6 +117,12 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
         
                                 counter_words = len(all_words_list)
                                                                
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                         except FileNotFoundError:
                             raise AllErrors.NotFoundFileError()
@@ -191,9 +217,15 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                              
             k += 1  
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     except (ValueError, AllErrors.TheEndAtTheBeginningError, AllErrors.ResponseRangeError, AllErrors.ExitConditionError, AllErrors.NotFoundFileError,AllErrors.ResponseError) as e:
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
         print(final_result)
     except (ValueError, TheEndAtTheBeginningError, ResponseRangeError,ExitConditionError,NotFoundFileError,ResponseError) as e:
 >>>>>>> Stashed changes
