@@ -35,7 +35,7 @@ class ResponseError(Exception):
 def error_management_and_processes(counter_sentences=0, counter_words=0, ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    ignored_words_txt='', ignored_dic_result={}, max_answer=0, min_answer=0,consecutive_words_counter=1,
                                    counter_consecutive_words_counter=0, all_words_list=[], sum_len_of_words =0, ava_len_of_words=0,
-                                   range_of_length_of_word=[],new_counter_words=0):
+                                   range_of_length_of_word=[],new_counter_words=0,word_jump=0,different_pattern_of_words_jump={}):
                 
                 
     k = 0
@@ -107,8 +107,17 @@ def error_management_and_processes(counter_sentences=0, counter_words=0, ignored
                 try:
                     answer = int(answer)
                     if k==2:
-                        pass
-        
+                        word_jump = answer
+                        different_pattern_of_words_jump = [] 
+                        
+                        result_of_sort_consecutive_words_counter = {}
+                                            
+                        for i in range(len(all_words_list)-(word_jump-1)):
+                                different_pattern_of_words_jump.append(' '.join(all_words_list[i:i+word_jump]))
+                        different_pattern_of_words_jump.sort()  
+                        for i in different_pattern_of_words_jump:
+                            result_of_sort_consecutive_words_counter[i] = different_pattern_of_words_jump.count(i)      
+
                     if k == 5:
                         max_answer = answer
                     if k == 6:
