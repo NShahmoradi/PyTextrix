@@ -1,40 +1,13 @@
 import re
-questions = {
-    0:'Hi! welcome to command line interface(📍if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?[Y/n]',
-    1:'Please enter path of your file:',
-    2:'Please enter a number for consecutive words counter(if you don\'t have any idea for consecutive words counter please enter\'n\'):',
-    3:'Do you have any ignored words file?(y/n)',
-    4:'Please enter path of your ignored words file(Your words in your ignored file should be separated by \'space\'):',
-    5:'Please enter a number for the maximum character range of words:',
-    6:'Please enter a number for the minimum character range of words:',
-    7:'Please enter path of your file which you want to save there:'
-}
-
-class TheEndAtTheBeginningError(Exception):
-        def __init__(self, message='If you don\'t want your case to be processed, what are you doing here?!🙃'):
-            super().__init__(message)
-
-class ResponseRangeError(Exception):                
-        def __init__(self, message='🛑 You have two ways to respond, y or n!'):
-            super().__init__(message) 
-
-class ExitConditionError(Exception):
-        def __init__(self, message='The process of processing your file is finished👋🙂'):
-            super().__init__(message)  
-
-class NotFoundFileError(Exception):
-        def __init__(self, message='🛑 Your file name or path may be incorrect or your file may be empty! please check your file.'):
-            super().__init__(message)
-
-class ResponseError(Exception):
-        def __init__(self, message='🛑 Your answer must be an integer or n!'):
-            super().__init__(message)    
+from operator import itemgetter
+import json
+from dependensyOfProject import questions,TheEndAtTheBeginningError,ResponseRangeError,ExitConditionError,NotFoundFileError,ResponseError
 
 def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    counter_sentences=0, counter_line=0 ,counter_words=0,ignored_words_txt='', ignored_dic_result={},
                                    max_answer=0, min_answer=0,consecutive_words_counter=1,counter_consecutive_words_counter=0,
                                    all_words_list=[],sum_len_of_words =0, ava_len_of_words=0,range_of_length_of_word=[],
-                                   new_counter_words=0,word_jump=0,different_pattern_of_words_jump={}):               
+                                   new_counter_words=0,word_jump=0,different_pattern_of_words_jump={},sign_of = ''):               
     k = 0
     try:  
         while k < len(questions):
@@ -58,7 +31,7 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                             if i in ignored_words_result_txt:
                                 result_txt.replace(i,' ')
  
-                        all_words_list = result_txt.split(' ')
+                        all_words_list = result_txt.split()
                         counter_words = len(all_words_list)
                         counter_line = len(result_txt.split('\n'))
         
@@ -66,10 +39,10 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                             sum_len_of_words += len(i)
                         ave_len_of_words = sum_len_of_words / counter_words  
 
-                    elif k == 3 and answer in 'yY':
-                        k=4
+                    elif k == 4 and answer in 'yY':
+                        k=5
                         try:
-                            answer = input(questions[4])
+                            answer = input(questions[5])
                             with open(answer, mode='r') as file:
                                 ignored_words_txt = file.read()
                                 ignored_words_result_txt = ignored_words_txt.split()
@@ -83,43 +56,41 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
 
                         except FileNotFoundError:
                             raise NotFoundFileError()
-                    elif k==7:
+                    elif k==8:
                         try:
                             print('✔ Your file has been processed')
                             with open(answer, mode='w') as file:
-                                final_result = file.write(
-                                    
-                                    {
+                                final_result =  {
                                         '🟢 Counter sentences:' : counter_sentences,'\n'
                                         '🟢 All of the words in your file:' : all_words_list,'\n'
                                         '🟢 Counter words:' : counter_words,'\n'
                                         '🟢 Counter lines:' : counter_line,'\n'
                                         '🟢 Ignored words list:' : ignored_words_result_txt,'\n'
                                         '🟢 The average length of words in your text:' : ave_len_of_words
-                                        
                                     }
-                                    
-                                    
-                                )   
+                                
+                                data = json.load(file)  
+                                  
                         except FileNotFoundError:
                             raise NotFoundFileError()   
                               
                 except FileNotFoundError:
                     raise NotFoundFileError()      
                     
-            if k == 3 and answer in 'nN':
-                k = 5 
+            if k == 4 and answer in 'nN':
+                k = 6 
                 continue
 
-            if k in [2, 5, 6]:
+            if k in [2, 6, 7]:
                 if k==2 and (answer in 'nN'):  
-                    k = 3
+                    k = 4
                     continue
-                
-                try:
 
-                    answer = int(answer)
-                    if k==2:
+                try:
+                    if k==2 and answer not in 'nN':
+                        sign_of = True
+                        answer = int(answer)
+                    
                         word_jump = answer
                         different_pattern_of_words_jump = [] 
                         
@@ -127,16 +98,33 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                                             
                         for i in range(len(all_words_list)-(word_jump-1)):
                                 different_pattern_of_words_jump.append(' '.join(all_words_list[i:i+word_jump])) 
-                                
                         for i in different_pattern_of_words_jump:
                             result_of_sort_consecutive_words_counter[different_pattern_of_words_jump.count(i)] =  i
                             
-                        sorted_dict = dict(sorted(result_of_sort_consecutive_words_counter.items()))    
+                        if k==3 and answer in 'dD':
+                            sorted_dict = dict(sorted(result_of_sort_consecutive_words_counter.items(), key=itemgetter(1)))
+                        elif k==3 and answer in 'Aa':
+                            sorted_dict_desc = dict(sorted(result_of_sort_consecutive_words_counter.items(), key=itemgetter(1), reverse=True))        
+    
+                    result_dict_for_normal_pattern = {}
+                    result_dict_for_normal_pattern ={i:all_words_list.count(i) for i in all_words_list}
+                    
+                    if k==3 and sign_of in 'True':
+                        if k==3 and answer in 'dD':
+                           sorted_dict = dict(sorted(result_of_sort_consecutive_words_counter.items(), key=itemgetter(1)))
+                        if k==3 and answer in 'aA':    
+                           sorted_dict_desc = dict(sorted(result_of_sort_consecutive_words_counter.items(), key=itemgetter(1), reverse=True))
+                           
+                    if k==3 and sign_of not in 'True':
+                        if k==3 and answer in 'dD':
+                           sorted_dict = dict(sorted(result_dict_for_normal_pattern.items(), key=itemgetter(1)))
+                        if k==3 and answer in 'aA':    
+                           sorted_dict_desc = dict(sorted(result_dict_for_normal_pattern.items(), key=itemgetter(1), reverse=True))
+                        
 
-
-                    if k == 5:
-                        max_answer = answer
                     if k == 6:
+                        max_answer = answer
+                    if k == 7:
                         min_answer = answer  
                              
                     elif min_answer and max_answer not in [0]:
@@ -170,7 +158,13 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                              
             k += 1  
 
-        print(final_result)
+        print('🟢 Counter sentences:' , counter_sentences,'\n',
+                                        '🟢 All of the words in your file:', all_words_list,'\n',
+                                        '🟢 Counter words:' , counter_words,'\n',
+                                        '🟢 Counter lines:' ,counter_line,'\n',
+                                        '🟢 Ignored words list:' , ignored_words_result_txt,'\n',
+                                        '🟢 The average length of words in your text:' , ave_len_of_words)
+        
     except (ValueError, TheEndAtTheBeginningError, ResponseRangeError,ExitConditionError,NotFoundFileError,ResponseError) as e:
 
         print(e)
