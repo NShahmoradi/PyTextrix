@@ -1,17 +1,6 @@
+import re
 questions = {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    0:'Hi! welcome to command line interface (📌 if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?(y/n)',
-=======
     0:'Hi! welcome to command line interface(📍if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?[Y/n]',
->>>>>>> Stashed changes
-======
-    0:'Hi! welcome to command line interface(📍if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?[Y/n]',
->>>>>>> Stashed changes
-=======
-    0:'Hi! welcome to command line interface(📍if you want to exit at any part of the program please enter "q" and be mindful which enter the full path of your file). Are you sure wanna continue?[Y/n]',
->>>>>>> Stashed changes
     1:'Please enter path of your file:',
     2:'Please enter a number for consecutive words counter(if you don\'t have any idea for consecutive words counter please enter\'n\'):',
     3:'Do you have any ignored words file?(y/n)',
@@ -20,65 +9,43 @@ questions = {
     6:'Please enter a number for the minimum character range of words:',
     7:'Please enter path of your file which you want to save there:'
 }
-class AllErrors:
-    class TheEndAtTheBeginningError(Exception):
+
+class TheEndAtTheBeginningError(Exception):
         def __init__(self, message='If you don\'t want your case to be processed, what are you doing here?!🙃'):
             super().__init__(message)
 
-    class ResponseRangeError(Exception):                
+class ResponseRangeError(Exception):                
         def __init__(self, message='🛑 You have two ways to respond, y or n!'):
             super().__init__(message) 
 
-    class ExitConditionError(Exception):
+class ExitConditionError(Exception):
         def __init__(self, message='The process of processing your file is finished👋🙂'):
             super().__init__(message)  
 
-    class NotFoundFileError(Exception):
+class NotFoundFileError(Exception):
         def __init__(self, message='🛑 Your file name or path may be incorrect or your file may be empty! please check your file.'):
             super().__init__(message)
 
-    class ResponseError(Exception):
+class ResponseError(Exception):
         def __init__(self, message='🛑 Your answer must be an integer or n!'):
             super().__init__(message)    
-            
-            
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            
-def error_management_and_processes(counter_sentences=0, counter_words=0, ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
-                                   ignored_words_txt='', ignored_dic_result={}, max_answer=0, min_answer=0,consecutive_words_counter=1,
-                                   counter_consecutive_words_counter=0, all_words_list=[], sum_len_of_words =0, ava_len_of_words=0,
-                                   range_of_length_of_word=[],new_counter_words=0):
-                
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    counter_sentences=0, counter_line=0 ,counter_words=0,ignored_words_txt='', ignored_dic_result={},
                                    max_answer=0, min_answer=0,consecutive_words_counter=1,counter_consecutive_words_counter=0,
                                    all_words_list=[],sum_len_of_words =0, ava_len_of_words=0,range_of_length_of_word=[],
                                    new_counter_words=0,word_jump=0,different_pattern_of_words_jump={}):               
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     k = 0
     try:  
         while k < len(questions):
             answer = input(questions[k])
             
             if answer in 'qQ':
-                raise AllErrors.ExitConditionError()
+                raise ExitConditionError()
             if k == 0 and answer in 'nN':
-                raise AllErrors.TheEndAtTheBeginningError()
+                raise TheEndAtTheBeginningError()
             if (k == 0 and answer not in 'YynN') or (k == 3 and answer not in 'YynN'):
-                raise AllErrors.ResponseRangeError()
+                raise ResponseRangeError()
                 
             if k in [1, 4, 7]:
                 try:
@@ -109,23 +76,13 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                                 
                                 for i in all_words_list:
                                     if i in ignored_words_result_txt:
-<<<<<<< Updated upstream
-                                        all_words_list.remove(i)
-                                counter_words = len(all_words_list)                               
-=======
                                         result_txt = re.sub(re.escape(i),' ', result_txt)
         
                                 counter_words = len(all_words_list)
-                                                               
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
+
                         except FileNotFoundError:
-                            raise AllErrors.NotFoundFileError()
+                            raise NotFoundFileError()
                     elif k==7:
                         try:
                             print('✔ Your file has been processed')
@@ -145,10 +102,10 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                                     
                                 )   
                         except FileNotFoundError:
-                            raise AllErrors.NotFoundFileError()   
+                            raise NotFoundFileError()   
                               
                 except FileNotFoundError:
-                    raise AllErrors.NotFoundFileError()      
+                    raise NotFoundFileError()      
                     
             if k == 3 and answer in 'nN':
                 k = 5 
@@ -163,10 +120,6 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
 
                     answer = int(answer)
                     if k==2:
-<<<<<<< Updated upstream
-                        pass
-        
-=======
                         word_jump = answer
                         different_pattern_of_words_jump = [] 
                         
@@ -180,7 +133,7 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                             
                         sorted_dict = dict(sorted(result_of_sort_consecutive_words_counter.items()))    
 
->>>>>>> Stashed changes
+
                     if k == 5:
                         max_answer = answer
                     if k == 6:
@@ -213,21 +166,12 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                                     all_words_list.remove(i)
                                                   
                 except ValueError:
-                    raise AllErrors.ResponseError()
+                    raise ResponseError()
                              
             k += 1  
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-    except (ValueError, AllErrors.TheEndAtTheBeginningError, AllErrors.ResponseRangeError, AllErrors.ExitConditionError, AllErrors.NotFoundFileError,AllErrors.ResponseError) as e:
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         print(final_result)
     except (ValueError, TheEndAtTheBeginningError, ResponseRangeError,ExitConditionError,NotFoundFileError,ResponseError) as e:
->>>>>>> Stashed changes
+
         print(e)
 error_management_and_processes()
