@@ -5,9 +5,9 @@ from dependensyOfProject import questions, TheEndAtTheBeginningError, ResponseRa
 
 def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    counter_sentences=0, counter_line=0, counter_words=0, ignored_words_txt='', ignored_dic_result={},
-                                   max_answer=0, min_answer=0, consecutive_words_counter=1, counter_consecutive_words_counter=0,
+                                   max_range_of_counter_word=0, min_range_of_counter_word=0, consecutive_words_counter=1,
                                    all_words_list=[], sum_len_of_words=0, ave_len_of_words=0, range_of_length_of_word=[],
-                                   new_counter_words=0, word_jump=0, different_pattern_of_words_jump=[], sign_of='',
+                                   new_counter_words=0, word_jump=0, different_pattern_of_words_jump=[], sign_of='', counter_consecutive_words_counter=0,
                                    result_of_sort_consecutive_words_counter={}, result_dict_for_normal_pattern={},sorted_dict_descending={}):      
     
          
@@ -20,8 +20,10 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                 raise ExitConditionError()
             if k == 0 and answer in 'nN':
                 raise TheEndAtTheBeginningError()
-            if (k == 0 and answer not in 'YyNn') or (k == 3 and answer not in 'aAdD'):
+            if (k == 0 and answer not in 'YyNn') or (k == 4 and answer not in 'YyNn'):
                 raise ResponseRangeError1()
+            if k == 3 and answer not in 'aAdD':
+                raise  ResponseRangeError2()
                 
             
             if k == 1:
@@ -47,6 +49,11 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                 if answer in 'nN':
                     k = 4
                     continue
+                if answer in '0':
+                    print('🖍  SO you don\'t want counter words!')
+                    counter_words = 0
+                    k = 4
+                    continue
                 else:
                     try:
                         word_jump = int(answer)
@@ -61,15 +68,10 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                         raise ResponseError()
 
             elif k == 3:
-                if answer not in 'aAdD':
-                    raise ResponseRangeError2()
-                
-                
                 if answer in 'dD':
                     sorted_dict = dict(sorted(result_of_sort_consecutive_words_counter.items(), key=itemgetter(1)))
                 elif answer in 'aA':
                     sorted_dict_descending = dict(sorted(result_of_sort_consecutive_words_counter.items(), key=itemgetter(1), reverse=True))
-                
                 
                 if sign_of != 'True':
                     result_dict_for_normal_pattern = {word: all_words_list.count(word) for word in all_words_list}
@@ -79,7 +81,10 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                         sorted_dict_descending = dict(sorted(result_dict_for_normal_pattern.items(), key=itemgetter(1), reverse=True))
 
             elif k == 4:
-                if answer in 'yY':
+                if answer in 'nN':
+                    k = 6
+                    continue
+                elif answer in 'yY':
                     k = 5
                     try:
                         answer = input(questions[5])
@@ -94,19 +99,16 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                             
                     except FileNotFoundError:
                         raise NotFoundFileError()
-                elif answer in 'nN':
-                    k = 6
-                    continue
+                
 
             elif k == 6:
                 pass
-            
             elif k == 7:
                 pass
             
             elif k == 8:
                 try:
-                    print('✔ Your file has been processed')
+                    print('✨ Your file has been processed')
                     with open(answer, mode='w') as file:
                         final_result = {
                             '🟢 Counter sentences': counter_sentences,
