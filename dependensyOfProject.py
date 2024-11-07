@@ -20,7 +20,11 @@ class ResponseRangeError1(Exception):
             
 class ResponseRangeError2(Exception):                
         def __init__(self, message='🛑 You have two ways to respond, a or d!'):
-            super().__init__(message)             
+            super().__init__(message)  
+
+class ResponseRangeError3(Exception):                
+        def __init__(self, message='🛑 Your answer should be integer!'):
+            super().__init__(message)                        
 
 class ExitConditionError(Exception):
         def __init__(self, message='The process of processing your file is finished👋🙂'):
