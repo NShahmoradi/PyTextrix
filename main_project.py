@@ -1,15 +1,14 @@
 from operator import itemgetter
 import re
 import json
-from dependensyOfProject import questions, TheEndAtTheBeginningError, ResponseRangeError1, ResponseRangeError2,ResponseRangeError3, ExitConditionError, NotFoundFileError, ResponseError
+from dependensyOfProject import questions, TheEndAtTheBeginningError, ResponseRangeError1, ResponseRangeError2,ResponseRangeError3,ExitConditionError, NotFoundFileError, ResponseError
 
 def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\","\n"],
                                    counter_sentences=0, counter_line=0, counter_words=0, ignored_words_txt='', ignored_dic_result={},
-                                   max_range_of_counter_word=0, min_range_of_counter_word=0, consecutive_words_counter=1,
+                                   max_range_of_counter_word=0, min_range_of_counter_word=0, consecutive_words_counter=1, longest_lenght_of_word = {},
                                    all_words_list=[], sum_len_of_words=0, ave_len_of_words=0, range_of_length_of_word=[],
-                                   new_counter_words=0, word_jump=0, different_pattern_of_words_jump=[], sign_of='', counter_consecutive_words_counter=0,
+                                   new_counter_words=0, different_pattern_of_words_jump=[], sign_of='', counter_consecutive_words_counter=0,
                                    result_of_sort_consecutive_words_counter={}, result_dict_for_normal_pattern={},sorted_dict_descending={}):      
-    
          
     k = 0
     try:  
@@ -39,7 +38,7 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                     counter_words = len(all_words_list)
                     counter_line = len(result_txt.split('\n'))
     
-                    sum_len_of_words = sum(len(word) for word in all_words_list)
+                    sum_len_of_words = sum([len(word) for word in all_words_list])
                     ave_len_of_words = sum_len_of_words / counter_words
                     
                 except FileNotFoundError:
@@ -50,17 +49,18 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                     k = 4
                     continue
                 if answer in '0':
-                    print('🖍  SO you don\'t want counter words!')
-                    counter_words = 0
+                    print('🖍  So you don\'t want consecutive words counter!')
                     k = 4
                     continue
                 else:
                     try:
-                        word_jump = int(answer)
+                        consecutive_words_counter = int(answer)
+                        if consecutive_words_counter == 1:
+                            different_pattern_of_words_jump = {k : all_words_list.count(v) for k,v in all_words_list }
                         sign_of = True # edit the name sign_of....
                     
-                        for i in range(len(all_words_list) - (word_jump - 1)):
-                            different_pattern_of_words_jump.append(' '.join(all_words_list[i:i+word_jump]))
+                        for i in range(len(all_words_list) - (consecutive_words_counter - 1)):
+                            different_pattern_of_words_jump.append(' '.join(all_words_list[i:i+consecutive_words_counter]))
                         for pattern in different_pattern_of_words_jump:
                             result_of_sort_consecutive_words_counter[different_pattern_of_words_jump.count(pattern)] = pattern
                     
@@ -99,35 +99,53 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
                                    if word in ignored_words_result_txt:
                                         result_txt = re.sub(re.escape(word), ' ', result_txt)
                                 counter_words = len(all_words_list)
-                            
+                                all_words_list = result_txt.split() 
+                                
                     except FileNotFoundError:
                         raise NotFoundFileError()
-                
-
+                    
             elif k == 6 or k == 7:
                 try:
                     if k == 6:
-                       max_range_of_counter_word = int(answer)
-                    else:
+                        max_range_of_counter_word = int(answer)
+                    if k == 7:
                         min_range_of_counter_word = int(answer)
-                    print('key min and 7:', min_range_of_counter_word)
-                    print('key max and 6:',max_range_of_counter_word)  
-                    if min_range_of_counter_word >= max_range_of_counter_word:
-                        raise ResponseRangeError1( f'Your minimum counter({min_range_of_counter_word}) is bigger than your maximum counter({max_range_of_counter_word})!')
                 except ValueError:
-                        raise ResponseRangeError3()  
-            
+                        raise ResponseRangeError3() 
+                    
+                print('key min and 7:', min_range_of_counter_word)
+                print('key max and 6:',max_range_of_counter_word) 
+                     
+                if min_range_of_counter_word <= 0 and max_range_of_counter_word <= 0:
+
+                    print('🖍 So You don\'t have any counter words!')
+                    counter_words = 0
+                        
+                if min_range_of_counter_word >= max_range_of_counter_word:
+                    print('🛑 Your minimum counter is greater than your maximum counter!This is not possible.')
+                    k = 8
+                    continue 
+                   
             elif k == 8:
+                answer = input(questions[8])
+                            
+                if answer in 'Cc':
+                    _ = min_range_of_counter_word
+                    min_range_of_counter_word, max_range_of_counter_word = max_range_of_counter_word , _  
+                if answer in 'Ee':
+                        raise ExitConditionError() 
+
+            elif k == 9:
                 try:
                     print('✨ Your file has been processed')
                     with open(answer.json, mode='w') as file:
                         final_result = {
-                            '🟢 Counter sentences': counter_sentences,
-                            '🟢 All of the words in your file': all_words_list,
-                            '🟢 Counter words': counter_words,
-                            '🟢 Counter lines': counter_line,
-                            '🟢 Ignored words list': ignored_words_result_txt,
-                            '🟢 The average length of words in your text': ave_len_of_words
+                            'Counter sentences': counter_sentences,
+                            'All of the words in your file': all_words_list,
+                            'Counter words': counter_words,
+                            'Counter lines': counter_line,
+                            'Ignored words list': ignored_words_result_txt,
+                            'The average length of words in your text': ave_len_of_words
                         }
    
                         json.dump(final_result, file, indent=4)
@@ -145,5 +163,5 @@ def error_management_and_processes(ignored_words_result_txt=[".", ",", "?", "!",
         
     except (ValueError, TheEndAtTheBeginningError,ResponseRangeError1,ResponseRangeError2,ResponseRangeError3,ExitConditionError,NotFoundFileError,ResponseError) as e:
         print(e)
-
+        
 error_management_and_processes()

@@ -7,7 +7,8 @@ questions = {
     5:'Please enter path of your ignored words file(Your words in your ignored file should be separated by \'space\'):',
     6:'Please enter a number for the maximum character range of words:',
     7:'Please enter a number for the minimum character range of words:',
-    8:'Please enter path of your file which you want to save there:'
+    8:'If you want to continue, the max range counter will be replaced with the max range counter otherwise, the program will exit! [C/e]:',
+    9:'Please enter path of your file which you want to save there:'
 }
 
 class TheEndAtTheBeginningError(Exception):
