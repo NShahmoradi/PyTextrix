@@ -1,4 +1,4 @@
-﻿from operator import itemgetter
+from operator import itemgetter
 import json
 from dependensyOfProject import questions, TheEndAtTheBeginningError, ResponseRangeError1, ResponseRangeError2, ResponseRangeError3, ResponseRangeError4,ResponseRangeError5, ExitConditionError, NotFoundFileError, ResponseError
 
