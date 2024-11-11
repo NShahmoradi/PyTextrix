@@ -7,7 +7,7 @@ questions = {
     5:'Please enter path of your ignored words file(Your words in your ignored file should be separated by \'space\'):',
     6:'Please enter a number for the maximum character range of words:',
     7:'Please enter a number for the minimum character range of words:',
-    8:'If you want to continue, the max range counter will be replaced with the max range counter otherwise, the program will exit! [C/e]:',
+    8:'If you want to continue, the max range counter will be replaced with the min range counter otherwise, the program will exit! [C/e]:',
     9:'Please enter path of your file which you want to save there:'
 }
 
@@ -28,8 +28,10 @@ class ResponseRangeError3(Exception):
             super().__init__(message)                        
 class ResponseRangeError4(Exception):                
         def __init__(self, message='🛑 You have two ways to respond, c or e!'):
-            super().__init__(message) 
-            
+            super().__init__(message)
+class ResponseRangeError5(Exception):                
+        def __init__(self, message='🛑 Your answer must be a positive integer!'):
+            super().__init__(message)             
 class ExitConditionError(Exception):
         def __init__(self, message='The process of processing your file is finished👋🙂'):
             super().__init__(message)  
