@@ -37,7 +37,7 @@ class ExitConditionError(Exception):
             super().__init__(message)  
 
 class NotFoundFileError(Exception):
-        def __init__(self, message='🛑 Your file name or path may be incorrect or your file may be empty! please check your file.'):
+        def __init__(self, message='🛑 File not found!'):
             super().__init__(message)
 
 class ResponseError(Exception):
