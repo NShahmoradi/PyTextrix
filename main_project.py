@@ -1,4 +1,4 @@
-from operator import itemgetter
+﻿from operator import itemgetter
 import json
 from dependensyOfProject import questions, TheEndAtTheBeginningError, ResponseRangeError1, ResponseRangeError2, ResponseRangeError3, ResponseRangeError4,ResponseRangeError5, ExitConditionError, NotFoundFileError, ResponseError
 import re
@@ -113,13 +113,13 @@ def error_management_and_processes(
                     raise ResponseRangeError3()
                 
                 if max_range_of_counter_word is not None and min_range_of_counter_word is not None:
-                    if min_range_of_counter_word <= 0 and max_range_of_counter_word <= 0:
+                    if min_range_of_counter_word == 0 and max_range_of_counter_word == 0:
                         print('🖍 So You don\'t have any counter words!')
                         counter_words = 0
                         k = 9
                         
-                    if (min_range_of_counter_word < 0) or (max_range_of_counter_word < 0):
-                        raise ResponseRangeError5()    
+                    elif (min_range_of_counter_word < 0) or (max_range_of_counter_word < 0):
+                        raise ResponseRangeError5()   
                     
                     elif min_range_of_counter_word > max_range_of_counter_word:
                         print('🛑 Your minimum counter is greater than your maximum counter! This is not possible.')
