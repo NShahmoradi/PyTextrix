@@ -3,10 +3,7 @@ import json
 from dependensyOfProject import questions, TheEndAtTheBeginningError, ResponseRangeError1, ResponseRangeError2, ResponseRangeError3, ResponseRangeError4,ResponseRangeError5, ExitConditionError, NotFoundFileError, ResponseError
 import re
 import os
-
-
-# def check_valid_path_output():
-    
+  
 def error_management_and_processes(
         ignored_words_result_txt=[".", ",", "’", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\", "\n"],
         counter_sentences=0, counter_line=0, counter_words=0, ignored_words_txt='', result_of_consecutive_words={},max_len_word=0,same_max_length=[],
@@ -169,8 +166,8 @@ def error_management_and_processes(
             if k == 9:
                 try:
                     answer = input(questions[9])
-                    # if not os.path.isdir(os.path.dirname(answer)):
-                    #     raise NotFoundFileError
+                    if not os.path.isdir(os.path.dirname(answer)):
+                        raise NotFoundFileError
                     
                     with open(answer + '.json', mode='w', encoding='utf-8') as file:
                         final_result = {
