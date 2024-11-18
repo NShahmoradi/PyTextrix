@@ -26,7 +26,7 @@ def error_management_and_processes(
         while k < len(questions):
             answer = input(questions[k])
              
-            # management of entries for questions 1 & 3 & 4
+            # management of entries for the questions 1 & 3 & 4
             if answer in 'qQ':
                 raise ExitConditionError()
             if k == 0 and answer in 'nN':
@@ -36,7 +36,7 @@ def error_management_and_processes(
             if k == 3 and answer not in 'aAdD':
                 raise ResponseRangeError2()
             
-            # read input text file
+            # read input the text file
             if k == 1:
                 try:
                     with open(answer, mode='r', encoding='utf-8') as file:
@@ -44,7 +44,7 @@ def error_management_and_processes(
                     counter_sentences = len([s for s in re.split(r'(?<=[.!?])\s+(?=[A-Z])', result_txt) if s.strip()])
                     counter_line = len(result_txt.splitlines())
                     
-                    # remove ignored words from input file
+                    # remove the ignored words from the input file
                     for char in ignored_words_result_txt:
                         result_txt = result_txt.replace(char, ' ')
 
@@ -64,20 +64,20 @@ def error_management_and_processes(
                 if answer in 'nN':
                     k = 4
                     continue
-                
                 if answer == '0':
                     print('🖍  So you don\'t want consecutive words counter!')
                     k = 4
                     continue
-                
                 if int(answer) < 0:
                         raise ResponseRangeError5()
                 else:
                     try:
                         consecutive_words_counter = int(answer)
+                        # if the consecutive word counter is 1, all words are counted one by one:
                         if consecutive_words_counter == 1:
                             consecutive_value1 = True 
-                            
+                         
+                        # implennting the consecutive word (if is bigger than 1!): 
                         elif consecutive_words_counter > 1:    
                             for i in range(len(all_words_list) - (consecutive_words_counter - 1)):
                                pattern = ' '.join(all_words_list[i:i+consecutive_words_counter])
@@ -86,7 +86,7 @@ def error_management_and_processes(
                     except ValueError:
                         raise ResponseError()
                     
-            # process of key2 :pattern of consecutive words and sorting them
+            # process of key2 :implementing the pattern of consecutive words and sorting them
             elif k == 3:
                 if not consecutive_value1:
                     if answer in 'dD':
@@ -132,15 +132,20 @@ def error_management_and_processes(
                 except ValueError:
                     raise ResponseRangeError3()
                 
+                # find the negative counter!!
+                if min_range_of_counter_word is not None and min_range_of_counter_word < 0:
+                    raise ResponseRangeError5()
+
+                if max_range_of_counter_word is not None and max_range_of_counter_word < 0:
+                    raise ResponseRangeError5()
+
+                # manage possible errors to get max & min word count:
                 if max_range_of_counter_word is not None and min_range_of_counter_word is not None:
                     if min_range_of_counter_word == 0 and max_range_of_counter_word == 0:
                         print('🖍 So You don\'t have any counter words!')
                         counter_words = 0
                         k = 9
                         
-                    elif (min_range_of_counter_word < 0) or (max_range_of_counter_word < 0):
-                        raise ResponseRangeError5()   
-                    
                     elif min_range_of_counter_word > max_range_of_counter_word:
                         print('🛑 Your minimum counter is greater than your maximum counter! This is not possible.')
                         try:
@@ -163,15 +168,17 @@ def error_management_and_processes(
                         all_words_list = [word for word in all_words_list if len(word) == min_range_of_counter_word]
                         counter_words = len(all_words_list)
                         k = 9
-                        
-
+                    
                     elif max_range_of_counter_word > min_range_of_counter_word:
                         range_of_length_of_word = range(min_range_of_counter_word, max_range_of_counter_word + 1)
                         final_all_words_list = [word for word in all_words_list if len(word) in range_of_length_of_word]
                         counter_words = len(final_all_words_list)
                         k = 9
+                
                     elif (max_range_of_counter_word < 0) or (min_range_of_counter_word< 0):
-                        raise ResponseRangeError5()    
+                        raise ResponseRangeError5()  
+                    
+                         
             # find the longest word according to the max and min counters
             for word in final_all_words_list:
                 if len(word) > max_len_word:
@@ -187,27 +194,21 @@ def error_management_and_processes(
             if k == 9:
                 try:
                     answer = input(questions[9])
+                    
+                    # checks if the directory of the specified path exists or not:  
                     if not os.path.isdir(os.path.dirname(answer)):
                         raise NotFoundFileError
                     
                     with open(answer + '.json', mode='w', encoding='utf-8') as file:
                         final_result = {
                             'Counter sentences': counter_sentences,
-                            
                             'Total words in the file according to minimum and maximum counters': final_all_words_list,
-                            
                             'Counter words': counter_words,
-                            
                             'Counter lines': counter_line,
-                            
                             'Ignored words list': ignored_words_result_txt,
-                            
                             'The average length of words in your text': ave_len_of_words,
-                            
                             'Consecutive words': result_of_consecutive_words,
-                            
                             'The last word with the longest character length': max_length,
-                            
                             'All of the longest length of word': same_max_length
                         }
                         json.dump(final_result, file, indent=3)
