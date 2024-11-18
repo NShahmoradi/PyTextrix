@@ -1,9 +1,19 @@
 ﻿from operator import itemgetter
 import json
-from dependensyOfProject import questions, TheEndAtTheBeginningError, ResponseRangeError1, ResponseRangeError2, ResponseRangeError3, ResponseRangeError4,ResponseRangeError5, ExitConditionError, NotFoundFileError, ResponseError
 import re
 import os
   
+from dependensyOfProject import (questions,
+                                 TheEndAtTheBeginningError, 
+                                 ResponseRangeError1, 
+                                 ResponseRangeError2, 
+                                 ResponseRangeError3,
+                                 ResponseRangeError4,
+                                 ResponseRangeError5,
+                                 ExitConditionError,
+                                 NotFoundFileError,
+                                 ResponseError)
+
 def error_management_and_processes(
         ignored_words_result_txt=[".", ",", "’", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\", "\n"],
         counter_sentences=0, counter_line=0, counter_words=0, ignored_words_txt='', result_of_consecutive_words={},max_len_word=0,same_max_length=[],
@@ -15,7 +25,8 @@ def error_management_and_processes(
     try:
         while k < len(questions):
             answer = input(questions[k])
-
+             
+            # management of entries for questions 1 & 3 & 4
             if answer in 'qQ':
                 raise ExitConditionError()
             if k == 0 and answer in 'nN':
@@ -24,7 +35,8 @@ def error_management_and_processes(
                 raise ResponseRangeError1()
             if k == 3 and answer not in 'aAdD':
                 raise ResponseRangeError2()
-
+            
+            # read input text file
             if k == 1:
                 try:
                     with open(answer, mode='r', encoding='utf-8') as file:
@@ -32,6 +44,7 @@ def error_management_and_processes(
                     counter_sentences = len([s for s in re.split(r'(?<=[.!?])\s+(?=[A-Z])', result_txt) if s.strip()])
                     counter_line = len(result_txt.splitlines())
                     
+                    # remove ignored words from input file
                     for char in ignored_words_result_txt:
                         result_txt = result_txt.replace(char, ' ')
 
@@ -39,11 +52,14 @@ def error_management_and_processes(
                     counter_words = len(all_words_list)
                     
                     sum_len_of_words = sum([len(word) for word in all_words_list])
+                    
+                    # the average number of characters in words in the entire file is the maximum and minimum counters
                     ave_len_of_words = sum_len_of_words / counter_words
 
                 except FileNotFoundError:
                     raise NotFoundFileError()
-
+                
+            # process of key2 : check to have any consecutive word counter
             elif k == 2:
                 if answer in 'nN':
                     k = 4
@@ -69,7 +85,8 @@ def error_management_and_processes(
                              
                     except ValueError:
                         raise ResponseError()
-
+                    
+            # process of key2 :pattern of consecutive words and sorting them
             elif k == 3:
                 if not consecutive_value1:
                     if answer in 'dD':
@@ -82,7 +99,8 @@ def error_management_and_processes(
                         result_of_consecutive_words = dict(sorted(result_dict_for_normal_pattern.items(), key=itemgetter(1)))
                     elif answer in 'aA':
                         result_of_consecutive_words= dict(sorted(result_dict_for_normal_pattern.items(), key=itemgetter(1), reverse=True))
-
+             
+            # process of key 4: read ignored word file
             elif k == 4:
                 if answer in 'nN':
                     k = 6
@@ -103,7 +121,8 @@ def error_management_and_processes(
 
                     except FileNotFoundError:
                         raise NotFoundFileError()
-
+                    
+            # processes of key 6 & 7 :  check and give the max & min counter for range of words
             elif k == 6 or k == 7:
                 try:
                     if k == 6:
@@ -153,16 +172,18 @@ def error_management_and_processes(
                         k = 9
                     elif (max_range_of_counter_word < 0) or (min_range_of_counter_word< 0):
                         raise ResponseRangeError5()    
-
+            # find the longest word according to the max and min counters
             for word in final_all_words_list:
                 if len(word) > max_len_word:
                     max_length = word
                     max_len_word = len(word)
                 else:
                     continue  
-                
+             
+            # find all words in the file whose length is equal to the length of the longest word in the file    
             same_max_length = [word for word in final_all_words_list if len(word)==max_len_word]  
-                  
+            
+            # process of key 9: get a path to save the result file in json format     
             if k == 9:
                 try:
                     answer = input(questions[9])
