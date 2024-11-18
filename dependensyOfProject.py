@@ -14,18 +14,15 @@ questions = {
 class TheEndAtTheBeginningError(Exception):
         def __init__(self, message='If you don\'t want your case to be processed, what are you doing here?!🙃'):
             super().__init__(message)
-
 class ResponseRangeError1(Exception):                
         def __init__(self, message='🛑 You have two ways to respond, y or n!'):
             super().__init__(message) 
-            
 class ResponseRangeError2(Exception):                
         def __init__(self, message='🛑 You have two ways to respond, a or d!'):
             super().__init__(message)  
-
 class ResponseRangeError3(Exception):                
         def __init__(self, message='🛑 Your answer should be integer!'):
-            super().__init__(message)                        
+            super().__init__(message)                           
 class ResponseRangeError4(Exception):                
         def __init__(self, message='🛑 You have two ways to respond, c or e!'):
             super().__init__(message)
@@ -35,11 +32,9 @@ class ResponseRangeError5(Exception):
 class ExitConditionError(Exception):
         def __init__(self, message='The process of processing your file is finished👋🙂'):
             super().__init__(message)  
-
 class NotFoundFileError(Exception):
         def __init__(self, message='🛑 File not found!'):
             super().__init__(message)
-
 class ResponseError(Exception):
         def __init__(self, message='🛑 Your answer must be an integer or n!'):
             super().__init__(message)  
