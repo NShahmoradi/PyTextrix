@@ -2,7 +2,8 @@
 import json
 from dependensyOfProject import questions, TheEndAtTheBeginningError, ResponseRangeError1, ResponseRangeError2, ResponseRangeError3, ResponseRangeError4,ResponseRangeError5, ExitConditionError, NotFoundFileError, ResponseError
 import re
-
+import os
+  
 def error_management_and_processes(
         ignored_words_result_txt=[".", ",", "’", "?", "!", ":", ";", "\"", "'", "-", "—", "(", ")", "[", "]", "...", "/", "{", "}", "<", ">", "|", "\\", "\n"],
         counter_sentences=0, counter_line=0, counter_words=0, ignored_words_txt='', result_of_consecutive_words={},max_len_word=0,same_max_length=[],
@@ -150,6 +151,8 @@ def error_management_and_processes(
                         final_all_words_list = [word for word in all_words_list if len(word) in range_of_length_of_word]
                         counter_words = len(final_all_words_list)
                         k = 9
+                    elif (max_range_of_counter_word < 0) or (min_range_of_counter_word< 0):
+                        raise ResponseRangeError5()    
 
             for word in final_all_words_list:
                 if len(word) > max_len_word:
@@ -163,6 +166,9 @@ def error_management_and_processes(
             if k == 9:
                 try:
                     answer = input(questions[9])
+                    if not os.path.isdir(os.path.dirname(answer)):
+                        raise NotFoundFileError
+                    
                     with open(answer + '.json', mode='w', encoding='utf-8') as file:
                         final_result = {
                             'Counter sentences': counter_sentences,
