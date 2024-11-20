@@ -155,6 +155,7 @@ def error_management_and_processes(
                         print('🛑 Your minimum counter is greater than your maximum counter! This is not possible.')
                         try:
                             answer = input(questions[8])
+                            # if the counter word range (max and min counter) is not correct, the counter values ​​will shift when receiving input c.
                             if answer in 'Cc':
                                 min_range_of_counter_word, max_range_of_counter_word = max_range_of_counter_word, min_range_of_counter_word
                                 range_of_length_of_word = range(min_range_of_counter_word, max_range_of_counter_word + 1)
@@ -167,19 +168,21 @@ def error_management_and_processes(
 
                         except ResponseRangeError4 as e:
                             print(e)
-
+                    
+                    # if you have same (max and min counter) actually you  you have one counter for filtering
                     elif (min_range_of_counter_word == max_range_of_counter_word) and (min_range_of_counter_word != 0):
                         print('🖍 So you have one limit for sorting your words of file!')
                         all_words_list = [word for word in all_words_list if len(word) == min_range_of_counter_word]
                         counter_words = len(all_words_list)
                         k = 9
-                    
+                    # if we have a normal counter (max_coun > min_count) we have the basic way to sort all the words
                     elif max_range_of_counter_word > min_range_of_counter_word:
                         range_of_length_of_word = range(min_range_of_counter_word, max_range_of_counter_word + 1)
                         final_all_words_list = [word for word in all_words_list if len(word) in range_of_length_of_word]
                         counter_words = len(final_all_words_list)
                         k = 9
-                
+                    
+                    # if we have a negative counter, the program will give an error.
                     elif (max_range_of_counter_word < 0) or (min_range_of_counter_word< 0):
                         raise ResponseRangeError5()  
                     
