@@ -61,15 +61,20 @@ def error_management_and_processes(
                 
             # process of key2 : check to have any consecutive word counter
             elif k == 2:
-                if answer in 'nN':
-                    k = 4
-                    continue
-                if answer == '0':
-                    print('🖍  So you don\'t want consecutive words counter!')
-                    k = 4
-                    continue
-                if int(answer) < 0:
+                try:
+                    if answer in 'nN':
+                        k = 4
+                        continue
+                    if answer == '0':
+                        print('🖍  So you don\'t want consecutive words counter!')
+                        k = 4
+                        continue
+                    if int(answer) < 0:
                         raise ResponseRangeError5()
+                    
+                except ValueError:    
+                        raise ResponseError()  
+                      
                 else:
                     try:
                         consecutive_words_counter = int(answer)
@@ -194,6 +199,8 @@ def error_management_and_processes(
             if k == 9:
                 try:
                     answer = input(questions[9])
+                    if answer in 'qQ':
+                        raise ExitConditionError()
                     
                     # checks if the directory of the specified path exists or not:  
                     if not os.path.isdir(os.path.dirname(answer)):
